@@ -1,5 +1,5 @@
 <?php
-	// https://gist.github.com/mloberg/1181537/9ee5e7baf0528a604348f1d1bed721ef6d79d1fe
+
 	class Mysql {
 		static private $link = null;
 		static private $info = array(
@@ -21,16 +21,10 @@
 			if(is_resource(self::$link)) mysqli_close(self::$link);
 		}
 
-		/**
-		 * Setter method
-		 */
 		static private function set($field, $value) {
 			self::$info[$field] = $value;
 		}
 		
-		/**
-		 * Getter methods
-		 */
 		public function last_query() {
 			return self::$info['last_query'];
 		}
@@ -42,10 +36,7 @@
 		public function insert_id() {
 			return self::$info['insert_id'];
 		}
-		
-		/**
-		 * Create or return a connection to the MySQL server.
-		 */
+
 		static private function connection() {
 			if (!is_resource(self::$link) || empty(self::$link)){
 				if ($link = mysqli_connect(self::$connection_info['host'], self::$connection_info['user'], self::$connection_info['pass'], self::$connection_info['db'])) {
@@ -58,9 +49,6 @@
 			return self::$link;
 		}
 		
-		/**
-		 * MySQL Where methods
-		 */
 		static private function __where($info, $type = 'AND') {
 			$link =& self::connection();
 			$where = self::$where;
@@ -96,17 +84,11 @@
 			return $this;
 		}
 		
-		/**
-		 * MySQL limit method
-		 */
 		public function limit($limit) {
 			self::$limit = 'LIMIT '.$limit;
 			return $this;
 		}
 		
-		/**
-		 * MySQL Order By method
-		 */
 		public function order_by($by, $order_type = 'DESC') {
 			$order = self::$order;
 			if (is_array($by)) {
@@ -132,9 +114,6 @@
 			return $this;
 		}
 		
-		/**
-		 * MySQL query helper
-		 */
 		static private function extra() {
 			$extra = '';
 			if (!empty(self::$where)) $extra .= ' '.self::$where;
@@ -147,9 +126,6 @@
 			return $extra;
 		}
 		
-		/**
-		 * MySQL Query methods
-		 */
 		public function query($query, $return = false) {
 			$link =& self::connection();
 			self::set('last_query', $query);
