@@ -23,10 +23,6 @@ services:
             - "9000:9000"
         volumes:
             - ./nginx/html:/var/www/html
-        environment:
-            PMA_HOST: db
-            PMA_USERE: iotadmin
-            PMA_PASSWORD: root
     phpmyadmin:
         container_name: iot_phpmyadmin
         image: phpmyadmin/phpmyadmin
@@ -36,8 +32,6 @@ services:
             - "8000:80"
         environment: 
             PMA_HOST: db
-            PMA_USER: root
-            PMA_PASSWORD: root
     web:
         container_name: iot_nginx
         build:
