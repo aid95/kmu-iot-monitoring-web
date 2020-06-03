@@ -17,43 +17,29 @@ let ktiot = (function (ktiot, $) {
         if (!IS_INIT) {
             ktiot.init();
         }
-        
-        send(
-            'GET',
+
+        return api_method_get_send(
             `${REST_API_HOST_URL}${TAG_STREAM_LOG_BASE_TIME}`,
-            {
-                'Authorization': 'Bearer ' + USER_TOKEN 
-            },
             { // params
                 period,
                 count
-            },
-            (res) => {
-                console.log(res);
             }
-        )
+        );
     };
 
     ktiot.get_tag_stream_until = (count, from, to) => {
         if (!IS_INIT) {
             ktiot.init();
         }
-        
-        send(
-            'GET',
+
+        return api_method_get_send(
             `${REST_API_HOST_URL}${TAG_STREAM_LOG_BASE_TIME}`,
-            {
-                'Authorization': 'Bearer ' + USER_TOKEN 
-            },
             { // params
                 from: conv_time_to_timestamp(from),
                 to: conv_time_to_timestamp(to),
                 count
-            },
-            (res) => {
-                console.log(res);
             }
-        )
+        );
     };
 
     ktiot.get_last_tag_stream = () => {
@@ -61,37 +47,19 @@ let ktiot = (function (ktiot, $) {
             ktiot.init();
         }
 
-        let ret;
-        send(
-            'GET',
+        return api_method_get_send(
             `${REST_API_HOST_URL}${TAG_STREAM_LOG_LAST}`,
-            {
-                'Authorization': 'Bearer ' + USER_TOKEN 
-            },
-            { // params 
-            },
-            (res) => {
-                ret = res;
-            }
-        )
+            { /* params */ }
+        );
     };
 
     ktiot.get_tag_stream = () => {
         if (!IS_INIT) {
             ktiot.init();
         }
-
-        send(
-            'GET',
+        return api_method_get_send(
             `${REST_API_HOST_URL}${TAG_STREAM_LOG_DETAIL}`,
-            {
-                'Authorization': 'Bearer ' + USER_TOKEN 
-            },
-            { // params 
-            },
-            (res) => {
-                console.log(res);
-            }
+            { /* params */ }
         )
     };
 
@@ -118,14 +86,29 @@ let ktiot = (function (ktiot, $) {
         );
     };
 
-    function send(method, url, headers, data, fn) {
+    function send(method, url, headers, data, fn, async=false) {
         $.ajax(url, {
+            async,
             method,
             xhrFields: { withCredentials: true },
             headers,
             data,
             success: fn
         });
+    }
+
+    function api_method_get_send(url, params) {
+        let ret;
+        send(
+            'GET',
+            url,
+            { 'Authorization': 'Bearer ' + USER_TOKEN },
+            params,
+            (res) => {
+                ret = res;
+            }
+        )
+        return ret;
     }
 
     function conv_time_to_timestamp(tstr) {
