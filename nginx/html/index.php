@@ -13,9 +13,26 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.css">
     <style>
     @font-face { font-family: 'silgothic'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/silgothic.woff') format('woff'); font-weight: normal; font-style: normal; }
-    .avg-txt {
+
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #F7F9F9;
+    }
+
+    .wrap {
+        width: 100%;
+        height: 100%;
+    }
+
+    .align-font-txt-center {
         text-align: center;
         font-family: 'silgothic';
+    }
+
+    .align-v-center {
+        margin-top: auto;
+        margin-bottom: auto;
     }
     </style>
 </head>
@@ -24,46 +41,71 @@
         <nav>
         </nav>
         <main>
-            <div class="content-logo"></div>
+            <div class="content-logo">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-xs-12 pt-4 pb-4" style="margin: 0 auto;">
+                            <span class="align-font-txt-center" style="font-size: 3rem;">FLORA MONITOR 🌼</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="container">
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="row">
-                            <div class="col-md-5">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <h2 id="avg-temperature" class="avg-txt">-</h2>
+                            <div class="col-md-5 align-v-center">
+                                <div class="card">
+                                    <div class="card-header">
+                                        최근 1시간 평균 데이터
+                                        <span style="float: right;">🔋 <span id="info-battery">-</span>%</span>
                                     </div>
-                                    <div class="col-md-3">
-                                        <h2 id="avg-moisture" class="avg-txt">-</h2>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <h2 id="avg-conductivity" class="avg-txt">-</h2>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <h2 id="avg-light" class="avg-txt">-</h2>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-7">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="row d-table">
-                                            <div class="col-xs-12">
-                                                <canvas id="chart-temperature"></canvas>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <p class="align-font-txt-center">Temp</p>
+                                                <h2 id="avg-temperature" class="align-font-txt-center">-</h2>
                                             </div>
-                                            <div class="col-xs-12">
-                                                <canvas id="chart-moisture"></canvas>
+                                            <div class="col-md-3">
+                                                <p class="align-font-txt-center">Moisture</p>
+                                                <h2 id="avg-moisture" class="align-font-txt-center">-</h2>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <p class="align-font-txt-center">Conductivity</p>
+                                                <h2 id="avg-conductivity" class="align-font-txt-center">-</h2>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <p class="align-font-txt-center">Light</p>
+                                                <h2 id="avg-light" class="align-font-txt-center">-</h2>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
+                                </div>
+                            </div>
+                            <div class="col-md-7 align-v-center">
+                                <div class="card">
+                                    <div class="card-header">최근 1시간 데이터 그래프</div>
+                                    <div class="card-body">
                                         <div class="row">
-                                            <div class="col-xs-12">
-                                                <canvas id="chart-conductivity"></canvas>
+                                            <div class="col-md-6">
+                                                <div class="row d-table">
+                                                    <div class="col-xs-12">
+                                                        <canvas id="chart-temperature"></canvas>
+                                                    </div>
+                                                    <div class="col-xs-12">
+                                                        <canvas id="chart-moisture"></canvas>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <div class="col-xs-12">
-                                                <canvas id="chart-light"></canvas>
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <canvas id="chart-conductivity"></canvas>
+                                                    </div>
+                                                    <div class="col-xs-12">
+                                                        <canvas id="chart-light"></canvas>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -87,7 +129,7 @@
     <script src="js/ktiot.js""></script>
     <script>
     const DATA_COUNT = 100;
-    const REQ_PERIOD = 3600;
+    const REQ_PERIOD = 60;
     const ATTR_NAME_LIST = ['light', 'temperature', 'moisture', 'conductivity'];
     const CHART_CTX_LIST = ATTR_NAME_LIST.map((s) => {
         let datasets = [{
@@ -174,9 +216,12 @@
         });
 
         let last_data = ktiot.get_last_tag_stream().data[0].attributes;
+        $("#info-battery").html(last_data['battery']);
         CHART_CTX_LIST.map((chart, index) => {
             chart.data.datasets[0].data.push(last_data[ATTR_NAME_LIST[index]]);
-            chart.data.datasets[0].data.shift();
+            if (chart.data.datasets[0].data.length > 60) {
+                chart.data.datasets[0].data.shift();
+            }
             chart.update();
         });
     }, 3000);
