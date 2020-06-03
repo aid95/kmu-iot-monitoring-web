@@ -13,20 +13,42 @@ let ktiot = (function (ktiot, $) {
     let USER_TOKEN;
     let LAST_RESPONSE_BODY;
 
-    ktiot.get_tag_stream_until = () => {
+    ktiot.get_tag_stream_period = (count, period) => {
         if (!IS_INIT) {
             ktiot.init();
         }
-
+        
         send(
             'GET',
             `${REST_API_HOST_URL}${TAG_STREAM_LOG_BASE_TIME}`,
-            { 
-                // headers
+            {
                 'Authorization': 'Bearer ' + USER_TOKEN 
             },
-            { 
-                // params 
+            { // params
+                period,
+                count
+            },
+            (res) => {
+                console.log(res);
+            }
+        )
+    };
+
+    ktiot.get_tag_stream_until = (count, from, to) => {
+        if (!IS_INIT) {
+            ktiot.init();
+        }
+        
+        send(
+            'GET',
+            `${REST_API_HOST_URL}${TAG_STREAM_LOG_BASE_TIME}`,
+            {
+                'Authorization': 'Bearer ' + USER_TOKEN 
+            },
+            { // params
+                from: conv_time_to_timestamp(from),
+                to: conv_time_to_timestamp(to),
+                count
             },
             (res) => {
                 console.log(res);
@@ -39,18 +61,17 @@ let ktiot = (function (ktiot, $) {
             ktiot.init();
         }
 
+        let ret;
         send(
             'GET',
             `${REST_API_HOST_URL}${TAG_STREAM_LOG_LAST}`,
-            { 
-                // headers
+            {
                 'Authorization': 'Bearer ' + USER_TOKEN 
             },
-            { 
-                // params 
+            { // params 
             },
             (res) => {
-                console.log(res);
+                ret = res;
             }
         )
     };
@@ -63,12 +84,10 @@ let ktiot = (function (ktiot, $) {
         send(
             'GET',
             `${REST_API_HOST_URL}${TAG_STREAM_LOG_DETAIL}`,
-            { 
-                // headers
+            {
                 'Authorization': 'Bearer ' + USER_TOKEN 
             },
-            { 
-                // params 
+            { // params 
             },
             (res) => {
                 console.log(res);
@@ -78,7 +97,6 @@ let ktiot = (function (ktiot, $) {
 
     ktiot.init = () => {
         request_token_aware_api();
-
         IS_INIT = true;
     };
 
@@ -110,8 +128,8 @@ let ktiot = (function (ktiot, $) {
         });
     }
 
-    function conv_to_timestamp(tstr) {
-        return Date.parse(tstr);
+    function conv_time_to_timestamp(tstr) {
+        return new Date(tstr).getTime();
     }
 
     return ktiot;
