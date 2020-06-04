@@ -65,19 +65,19 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-3">
-                                                <p class="align-font-txt-center">Temp</p>
+                                                <p class="align-font-txt-center">🌡</p>
                                                 <h2 id="avg-temperature" class="align-font-txt-center">-</h2>
                                             </div>
                                             <div class="col-md-3">
-                                                <p class="align-font-txt-center">Light</p>
+                                                <p class="align-font-txt-center">💡</p>
                                                 <h2 id="avg-light" class="align-font-txt-center">-</h2>
                                             </div>
                                             <div class="col-md-3">
-                                                <p class="align-font-txt-center">Conductivity</p>
+                                                <p class="align-font-txt-center">⚡</p>
                                                 <h2 id="avg-conductivity" class="align-font-txt-center">-</h2>
                                             </div>
                                             <div class="col-md-3">
-                                                <p class="align-font-txt-center">Moisture</p>
+                                                <p class="align-font-txt-center">💦</p>
                                                 <h2 id="avg-moisture" class="align-font-txt-center">-</h2>
                                             </div>
                                         </div>
@@ -89,22 +89,22 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-3">
-                                                <p class="align-font-txt-center">Temp</p>
+                                                <p class="align-font-txt-center">🌡</p>
                                                 <h3 id="min-temperature" class="align-font-txt-center">-</h2>
                                                 <h3 id="max-temperature" class="align-font-txt-center">-</h2>
                                             </div>
                                             <div class="col-md-3">
-                                                <p class="align-font-txt-center">Light</p>
+                                                <p class="align-font-txt-center">💡</p>
                                                 <h3 id="min-light" class="align-font-txt-center">-</h2>
                                                 <h3 id="max-light" class="align-font-txt-center">-</h2>
                                             </div>
                                             <div class="col-md-3">
-                                                <p class="align-font-txt-center">Conductivity</p>
+                                                <p class="align-font-txt-center">⚡</p>
                                                 <h3 id="min-conductivity" class="align-font-txt-center">-</h2>
                                                 <h3 id="max-conductivity" class="align-font-txt-center">-</h2>
                                             </div>
                                             <div class="col-md-3">
-                                                <p class="align-font-txt-center">Moisture</p>
+                                                <p class="align-font-txt-center">💦</p>
                                                 <h3 id="min-moisture" class="align-font-txt-center">-</h2>
                                                 <h3 id="max-moisture" class="align-font-txt-center">-</h2>
                                             </div>
@@ -156,23 +156,13 @@
                                     <div class="card-header" style="background-color: rgba(0,0,0,0); border-bottom: none;">
                                         날씨 정보
                                     </div>
-                                    <div class="card-body">
+                                    <div class="card-body pt-0">
                                         <div class="row">
-                                            <div class="col-md-3">
-                                                <p class="align-font-txt-center">Temp</p>
-                                                <h2 id="avg-temperature" class="align-font-txt-center">-</h2>
+                                            <!-- START: 현재 날씨 -->
+                                            <div class="col-md-4" id="cur-weather">
                                             </div>
-                                            <div class="col-md-3">
-                                                <p class="align-font-txt-center">Light</p>
-                                                <h2 id="avg-light" class="align-font-txt-center">-</h2>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <p class="align-font-txt-center">Conductivity</p>
-                                                <h2 id="avg-conductivity" class="align-font-txt-center">-</h2>
-                                            </div>
-                                            <div class="col-md-3">
-                                                <p class="align-font-txt-center">Moisture</p>
-                                                <h2 id="avg-moisture" class="align-font-txt-center">-</h2>
+                                            <!-- END:  현재 날씨-->
+                                            <div class="col-md-8">
                                             </div>
                                         </div>
                                     </div>
@@ -349,15 +339,17 @@
         $("#info-battery").html(last_data['battery']);
         CHART_CTX_LIST.map((chart, index) => {
             chart.data.datasets[0].data.push(last_data[ATTR_NAME_LIST[index]]);
-            if (chart.data.datasets[0].data.length > 60) {
-                chart.data.datasets[0].data.shift();
-            }
-            chart.update();
-
             $(`#min-${ATTR_NAME_LIST[index]}`).html(Math.min.apply(null, chart.data.datasets[0].data));
             $(`#max-${ATTR_NAME_LIST[index]}`).html(Math.max.apply(null, chart.data.datasets[0].data));
+            if (chart.data.datasets[0].data.length > DATA_COUNT) {
+                chart.data.datasets[0].data.shift();
+            }
+            // FIX: 배열에 100개의 값이 없는 경우 업데이트가 제대로 안됨.
+            chart.update();
         });
-    }, 5000);
+    }, 3100);
+
+    owmapi.one_call_weather('cur-weather');
     // END:     KT IOTmakers를 위한 자바스크립트
     </script>
 </body>
