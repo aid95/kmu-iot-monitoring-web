@@ -3,15 +3,15 @@ let ktiot = (function (ktiot, $) {
 
     const REST_API_HOST_URL         = "https://iotmakers.kt.com";
 
-    const REQ_OAUTH_TOKEN           = "/oauth/token";
+    // Request Oauth Path
+    const REQ_OAUTH_TOKEN_PATH      = "oauth/token";
     // Tag Stream API Path
-    const TAG_STREAM_LOG_BASE_TIME  = `/api/v1/streams/${DEVICE_ID}/log`;
-    const TAG_STREAM_LOG_DETAIL     = `/api/v1/streams/${DEVICE_ID}`;
-    const TAG_STREAM_LOG_LAST       = `/api/v1/streams/${DEVICE_ID}/log/last`;
+    const TAG_STREAM_LOG_BASE_TIME  = `api/v1/streams/${DEVICE_ID}/log`;
+    const TAG_STREAM_LOG_DETAIL     = `api/v1/streams/${DEVICE_ID}`;
+    const TAG_STREAM_LOG_LAST       = `api/v1/streams/${DEVICE_ID}/log/last`;
 
     let IS_INIT = false;
     let USER_TOKEN;
-    let LAST_RESPONSE_BODY;
 
     ktiot.get_tag_stream_period = (count, period) => {
         if (!IS_INIT) {
@@ -19,7 +19,7 @@ let ktiot = (function (ktiot, $) {
         }
 
         return api_method_get_send(
-            `${REST_API_HOST_URL}${TAG_STREAM_LOG_BASE_TIME}`,
+            `${REST_API_HOST_URL}/${TAG_STREAM_LOG_BASE_TIME}`,
             { // params
                 period,
                 count
@@ -33,7 +33,7 @@ let ktiot = (function (ktiot, $) {
         }
 
         return api_method_get_send(
-            `${REST_API_HOST_URL}${TAG_STREAM_LOG_BASE_TIME}`,
+            `${REST_API_HOST_URL}/${TAG_STREAM_LOG_BASE_TIME}`,
             { // params
                 from: conv_time_to_timestamp(from),
                 to: conv_time_to_timestamp(to),
@@ -48,7 +48,7 @@ let ktiot = (function (ktiot, $) {
         }
 
         return api_method_get_send(
-            `${REST_API_HOST_URL}${TAG_STREAM_LOG_LAST}`,
+            `${REST_API_HOST_URL}/${TAG_STREAM_LOG_LAST}`,
             { /* params */ }
         );
     };
@@ -58,7 +58,7 @@ let ktiot = (function (ktiot, $) {
             ktiot.init();
         }
         return api_method_get_send(
-            `${REST_API_HOST_URL}${TAG_STREAM_LOG_DETAIL}`,
+            `${REST_API_HOST_URL}/${TAG_STREAM_LOG_DETAIL}`,
             { /* params */ }
         )
     };
@@ -71,7 +71,7 @@ let ktiot = (function (ktiot, $) {
     function request_token_aware_api() {
         send(
             'POST',
-            'https://iotmakers.kt.com/oauth/token', 
+            `${REST_API_HOST_URL}/${REQ_OAUTH_TOKEN_PATH}`,
             { // headers
                 'Authorization': 'Basic ' + btoa(atob('NHlpSGx3aElNeDhTY0xXaw==') + ':' + atob('VlRvdE4xS1dGOFhsR09pQQ=='))
             },
