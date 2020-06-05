@@ -1,8 +1,3 @@
-<?php
-    include_once("db/mysql.php");
-    $mysql = new MySql("localhost", "root", "root", "iotadmin_db");
-?>
-
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -56,7 +51,7 @@
                 <div class="row">
                     <div class="col-xs-12">
                         <div class="row">
-                            <div class="col-md-5 pt-2 pb-2" style="padding-right: 5px;">
+                            <div class="col-md-5 pt-2 pb-2">
                                 <div class="card h-100">
                                     <div class="card-header" style="background-color: rgba(0,0,0,0); border-bottom: none;">
                                         최근 평균 데이터
@@ -112,7 +107,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-7 align-v-center pt-2 pb-2" style="padding-left: 5px;">
+                            <div class="col-md-7 align-v-center pt-2 pb-2">
                                 <div class="card">
                                     <div class="card-header" style="background-color: rgba(0,0,0,0); border-bottom: none;">최근 데이터 그래프</div>
                                     <div class="card-body">
@@ -162,7 +157,7 @@
                                             <div class="col-md-4" id="cur-weather">
                                             </div>
                                             <!-- END:  현재 날씨-->
-                                            <div class="col-md-8">
+                                            <div class="col-md-8" id="week-weather">
                                             </div>
                                         </div>
                                     </div>
@@ -203,6 +198,7 @@
         return result;
     }
     // END:     개발 편의를 위한 사용자 정의 함수
+
 
     // START:   레이아웃이 깨지는걸 막기 위한 flowtype 라이브러리 설정
     const DISPLAY_AVG_ELEM_NAME_LIST = ['temperature', 'light', 'conductivity', 'moisture'];
@@ -349,7 +345,7 @@
         });
     }, 3100);
 
-    owmapi.one_call_weather('cur-weather');
+    owmapi.one_call_weather('cur-weather', 'week-weather');
     // END:     KT IOTmakers를 위한 자바스크립트
     </script>
 </body>
