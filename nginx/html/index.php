@@ -153,12 +153,53 @@
                                     </div>
                                     <div class="card-body pt-0">
                                         <div class="row">
-                                            <!-- START: 현재 날씨 -->
-                                            <div class="col-md-4" id="cur-weather">
+                                            <!-- START:  현재 날씨 -->
+                                            <div class="col-md-4">
+                                                <div class="card h-100" style="border: none;">
+                                                    <div class="card-header" style="background-color: rgba(0,0,0,0); border-bottom: none;">
+                                                        현재 날씨
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <!-- START: 주간 날씨 -->
+                                                            <div class="col-md-12" id="cur-weather">
+                                                            </div>
+                                                            <!-- END: 주간 날씨 -->
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
-                                            <!-- END:  현재 날씨-->
-                                            <div class="col-md-8" id="week-weather">
+                                            <!-- END:  현재 날씨 -->
+
+                                            <!-- START: 주간 날씨 정보 -->
+                                            <div class="col-md-8">
+                                                <div class="card h-100" style="border: none;">
+                                                    <div class="card-header" style="background-color: rgba(0,0,0,0); border-bottom: none;">
+                                                        주간 평균 날씨
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <!-- START: 주간 평균 날씨 -->
+                                                            <div class="col-md-12 align-font-txt-center" style="font-size: 20px;" id="week-avg-weather">
+                                                            </div>
+                                                            <!-- END: 주간 평균 날씨 -->
+                                                        </div>
+                                                    </div>
+                                                    <div class="card-header" style="border-top: 1px solid rgba(0,0,0,.125); background-color: rgba(0,0,0,0); border-bottom: none;">
+                                                        주간 날씨
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <!-- START: 주간 날씨 -->
+                                                            <div class="col-md-12" id="week-weather">
+                                                            </div>
+                                                            <!-- END: 주간 날씨 -->
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
+                                            <!-- END: 주간 날씨 정보 -->
+
                                         </div>
                                     </div>
                                 </div>
@@ -199,40 +240,13 @@
     }
     // END:     개발 편의를 위한 사용자 정의 함수
 
-
-    // START:   레이아웃이 깨지는걸 막기 위한 flowtype 라이브러리 설정
-    const DISPLAY_AVG_ELEM_NAME_LIST = ['temperature', 'light', 'conductivity', 'moisture'];
-    DISPLAY_AVG_ELEM_NAME_LIST.map((s) => {
-        $(`#avg-${s}`).flowtype({
-            minimum   : 110,
-            maximum   : 111,
-            minFont   : 27,
-            maxFont   : 28,
-            fontRatio : 30
-        });
-        $(`#min-${s}`).flowtype({
-            minimum   : 110,
-            maximum   : 111,
-            minFont   : 25,
-            maxFont   : 26,
-            fontRatio : 30
-        });
-        $(`#max-${s}`).flowtype({
-            minimum   : 110,
-            maximum   : 111,
-            minFont   : 25,
-            maxFont   : 26,
-            fontRatio : 30
-        });
-    });
-    // END:     레이아웃이 깨지는걸 막기 위한 flowtype 라이브러리 설정
-
-
-    // START:   KT IOTmakers를 위한 자바스크립트
+    // START:   KT IoTMakers에 필요한 전역 변수들
     const DATA_COUNT = 100;
     const REQ_PERIOD = 60;
     const ATTR_NAME_LIST = ['light', 'temperature', 'moisture', 'conductivity'];
+    // END:     KT IoTMakers에 필요한 전역 변수들
 
+    // START:   KT iotmakers 데이터 그래프 표시
     let tag_stream_datas = ktiot.get_tag_stream_period(DATA_COUNT, REQ_PERIOD).data.reverse();
     const CHART_CTX_LIST = ATTR_NAME_LIST.map((s) => {
         let datasets = [{
@@ -310,7 +324,9 @@
         });
         return myChart;
     });
+    // END:   KT iotmakers 데이터 그래프 표시
 
+    // START:   주기적인 KT IOTmakers 통신을 위한 콜백함수
     setInterval(() => {
         // REQ_PERIOD분 동안의 DATA_COUNT개의 데이터의 평균을 구함.
         let period_datas = ktiot.get_tag_stream_period(DATA_COUNT, REQ_PERIOD).data;
@@ -344,9 +360,40 @@
             chart.update();
         });
     }, 3100);
+    // END:     주기적인 KT IOTmakers 통신을 위한 콜백함수
 
-    owmapi.one_call_weather('cur-weather', 'week-weather');
-    // END:     KT IOTmakers를 위한 자바스크립트
+    $( document ).ready(function() {
+        // START:   레이아웃이 깨지는걸 막기 위한 flowtype 라이브러리 설정
+        const DISPLAY_AVG_ELEM_NAME_LIST = ['temperature', 'light', 'conductivity', 'moisture'];
+        DISPLAY_AVG_ELEM_NAME_LIST.map((s) => {
+            $(`#avg-${s}`).flowtype({
+                minimum   : 110,
+                maximum   : 111,
+                minFont   : 27,
+                maxFont   : 28,
+                fontRatio : 30
+            });
+            $(`#min-${s}`).flowtype({
+                minimum   : 110,
+                maximum   : 111,
+                minFont   : 25,
+                maxFont   : 26,
+                fontRatio : 30
+            });
+            $(`#max-${s}`).flowtype({
+                minimum   : 110,
+                maximum   : 111,
+                minFont   : 25,
+                maxFont   : 26,
+                fontRatio : 30
+            });
+        });
+        // END:     레이아웃이 깨지는걸 막기 위한 flowtype 라이브러리 설정
+
+        // START: 날씨 정보 초기화
+        owmapi.one_call_weather('cur-weather', 'week-weather', 'week-avg-weather');
+        // END: 날씨 정보 초기화
+    });
     </script>
 </body>
 </html>
