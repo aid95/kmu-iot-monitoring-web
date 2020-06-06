@@ -12,7 +12,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1280, initial-scale=1.0">
-    <title>FLORA - 스마트 IoT 화분 관리</title>
+    <title>FLORA :: 스마트 IoT 화분 관리</title>
 
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
@@ -260,16 +260,14 @@
         </footer>
     </div>
     
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
-    <script src="js/flowtype.js""></script>
+    <script src="js/flowtype.js"></script>
 
-    <script src="js/ktiot.js""></script>
-    <script src="js/weather.js""></script>
+    <script src="js/ktiot.js"></script>
+    <script src="js/weather.js"></script>
     <script>
     /**
      *  DOM 업데이트와 태그 스트림 데이터 가공하기 위한 작업 작성
