@@ -1,4 +1,7 @@
 let owmapi = (function (owmapi, $) {
+    /**
+     * @description OpenWeatherMap API를 사용하기 위한 전역변수
+     */
     const API_KEY                   = atob("NmJlZjY0ZmQyMTNjM2U4Y2Y0OTFkNTRmMDk1MmQ1ODA=");
     const CITY_NAME                 = "daegu";
 
@@ -9,22 +12,46 @@ let owmapi = (function (owmapi, $) {
     const DAILY_FORECAST_API_URL    = `https://api.openweathermap.org/data/2.5/forecast/daily?q=${CITY_NAME}&cnt=${DAILY_FORECAST_COUNT}&appid=${API_KEY}`;
     const ONE_CALL_API_URL          = `https://api.openweathermap.org/data/2.5/onecall?lat=35.8&lon=128.55&%20exclude=&appid=${API_KEY}`;
 
+    /**
+     *  @todo 현재 날씨를 가져오기 위한 함수
+     * 
+     *  @author: 김규동
+     *  @param: void
+     *  @return: void
+     */
     owmapi.get_cur_weather = () => {
         let weather
         send(
             'GET', CUR_WEATHER_API_URL, {'Content-Type': 'application/json'}, '', (res) => { weather = res; }
         );
-        console.log(weather);
     };
 
+    /**
+     *  @todo 오늘의 날씨를 가져오기 위한 함수
+     * 
+     *  @author: 김규동
+     *  @param: void
+     *  @return: void
+     */
     owmapi.get_daily_weather = () => {
         let weather
         send(
             'GET', DAILY_FORECAST_API_URL, {'Content-Type': 'application/json'}, '', (res) => { weather = res; }
         );
-        console.log(weather);
     }
 
+    /**
+     *  @description 날씨에 관련된 모든 데이터를 한번에 가져오기와 현재 날씨 주간 날씨 주간 평균 날씨 위젯을 표시하기 위한 함수
+     * 
+     *  @author: 
+     *      - 김규동
+     *      - 신병주(webmaster@mail.gomi.land)
+     *  @param:
+     *      - cur_weather_dom: 현재 날씨 정보 위젯을 표시하기 위한 DOM 이름
+     *      - week_weather_dom: 주간 날씨 정보 위젯을 표시하기 위한 DOM 이름
+     *      - week_avg_weather_dom: 주간 평규 날씨 정보 위젯을 표시하기 위한 DOM 이름
+     *  @return: void
+     */
     owmapi.one_call_weather = (cur_weather_dom, week_weather_dom, week_avg_weather_dom) => {
         let weather
         send(
@@ -43,7 +70,7 @@ let owmapi = (function (owmapi, $) {
                         $("<img>").attr("src", `http://openweathermap.org/img/wn/${weather.current.weather[0].icon}@4x.png`)
                     ),
                     $("<div>").addClass("col-md-12").addClass("align-font-txt-center").append(
-                        $("<p>").html(`🌡 ${(weather.current.temp-273.15).toFixed(1)}℃ / 🤒 ${(weather.current.feels_like-273.15).toFixed(1)}℃ / 🕶 ${(weather.current.uvi).toFixed(1)} / 💧 ${(weather.current.humidity).toFixed(1)}`),
+                        $("<p>").html(`🌡 ${(weather.current.temp-273.15).toFixed(1)}℃ / 🤒 ${(weather.current.feels_like-273.15).toFixed(1)}℃ / 🕶 ${(weather.current.uvi).toFixed(1)} / 💦 ${(weather.current.humidity).toFixed(1)}`),
                     )
                 )
             );
@@ -85,13 +112,27 @@ let owmapi = (function (owmapi, $) {
                 total_uvi += daily_datas[0].uvi;
             }
 
-            let avg_dom = $("<p>").html(`🌡 ${(total_temp / daily_datas_len).toFixed(1)}℃ / 🤒 ${(total_feels_like / daily_datas_len).toFixed(1)}℃ / 🕶 ${(total_uvi / daily_datas_len).toFixed(1)} / 💧 ${(total_humidity / daily_datas_len).toFixed(1)}`);
+            let avg_dom = $("<p>").html(`🌡 ${(total_temp / daily_datas_len).toFixed(1)}℃ / 🤒 ${(total_feels_like / daily_datas_len).toFixed(1)}℃ / 🕶 ${(total_uvi / daily_datas_len).toFixed(1)} / 💦 ${(total_humidity / daily_datas_len).toFixed(1)}`);
             root_dom.empty().append(avg_dom);
         }
 
         return weather;
     }
 
+    /**
+     *  @description Ajax를 간편하기 사용하기 위한 함수
+     * 
+     *  @author: 김규동
+     *  @param:
+     *      - method: 메소드명
+     *      - url: 요청할 URL 주소
+     *      - headers: 요청시 포함할 헤더정보
+     *      - data: 요청시 포함할 데이터
+     *      - fn: 통신이 성공할 경우 호출될 함수
+     *      - async: 비동기화 통신 Flag
+     *      - cors_proxy: CORS 규칙을 위한 프록시 서버 사용 Flag
+     *  @return: void
+     */
     function send(method, url, headers, data, fn, async=false, cors_proxy=true) {
         if (cors_proxy) {
             url = `${CROS_PROXY_URL}/${url}`;
@@ -105,6 +146,14 @@ let owmapi = (function (owmapi, $) {
         });
     }
 
+    /**
+     *  @description 유닉스 스탬프로부터 요일명 가져오기
+     * 
+     *  @author: 김규동
+     *  @param:
+     *      - dt: 유닉스-스탬프
+     *  @return: 요일명
+     */
     function get_day_name_from_unix_timestamp(dt) {
         return new Date(dt * 1000).toString().split(' ')[0].toUpperCase()
     }
