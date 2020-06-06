@@ -147,11 +147,11 @@ let owmapi = (function (owmapi, $) {
     }
 
     /**
-     *  @description 유닉스 스탬프로부터 요일명 가져오기
+     *  @description unix-timestamp로부터 요일명 가져오기
      * 
      *  @author: 김규동
      *  @param:
-     *      - dt: 유닉스-스탬프
+     *      - dt: datetime
      *  @return: 요일명
      */
     function get_day_name_from_unix_timestamp(dt) {

@@ -12,7 +12,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1280, initial-scale=1.0">
-    <title>FLORA 🌷 스마트 IoT 화분 관리</title>
+    <title>FLORA - 스마트 IoT 화분 관리</title>
 
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
@@ -51,7 +51,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-xs-12 pt-4 pb-4" style="margin: 0 auto;">
-                            <span class="align-font-txt-center" style="font-size: 3rem;">FLORA 🌷 MONITOR<span>
+                            <span class="align-font-txt-center" style="font-size: 3rem;">FLORA 🌺 MONITOR<span>
                         </div>
                     </div>
                 </div>
@@ -220,6 +220,7 @@
                 </div>
             </div>
             <!-- END: 날씨 정보 -->
+
             <!-- START: 이벤트&SNS 정보 -->
             <!--
             <div class="container">
