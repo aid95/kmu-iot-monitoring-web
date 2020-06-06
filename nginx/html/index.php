@@ -1,3 +1,13 @@
+<!--
+               @TEAM.MAKERS
+     _._     _,-'""`-._
+    (,-.`._,'(       |\`-/|
+        `-.-' \ )-`( , o o)
+            `-    \`_`"'-
+     2020y6m Keimyung UNIV.
+    webmaster@mail.gomi.land
+-->
+
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
@@ -55,7 +65,6 @@
                                 <div class="card h-100">
                                     <div class="card-header" style="background-color: rgba(0,0,0,0); border-bottom: none;">
                                         최근 평균 데이터
-                                        <span style="float: right;">🔋 <span id="info-battery">-</span>%</span>
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
@@ -109,7 +118,10 @@
                             </div>
                             <div class="col-md-7 align-v-center pt-2 pb-2">
                                 <div class="card">
-                                    <div class="card-header" style="background-color: rgba(0,0,0,0); border-bottom: none;">최근 데이터 그래프</div>
+                                    <div class="card-header" style="background-color: rgba(0,0,0,0); border-bottom: none;">
+                                        최근 데이터 그래프
+                                        <span style="float: right;">🔋 <span id="info-battery">-</span>%</span>
+                                    </div>
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-md-6">
@@ -180,7 +192,7 @@
                                                     <div class="card-body">
                                                         <div class="row">
                                                             <!-- START: 주간 평균 날씨 -->
-                                                            <div class="col-md-12 align-font-txt-center" style="font-size: 20px;" id="week-avg-weather">
+                                                            <div class="col-md-12 align-font-txt-center" style="font-size: 2.1rem;" id="week-avg-weather">
                                                             </div>
                                                             <!-- END: 주간 평균 날씨 -->
                                                         </div>
@@ -199,7 +211,6 @@
                                                 </div>
                                             </div>
                                             <!-- END: 주간 날씨 정보 -->
-
                                         </div>
                                     </div>
                                 </div>
@@ -209,8 +220,42 @@
                 </div>
             </div>
             <!-- END: 날씨 정보 -->
+            <!-- START: 이벤트&SNS 정보 -->
+            <!--
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="row">
+                            <div class="col-md-5 pt-2 pb-2">
+                                <div class="card h-100">
+                                    <div class="card-header" style="background-color: rgba(0,0,0,0); border-bottom: none;">
+                                        이벤트 기록
+                                    </div>
+                                    <div class="card-body pt-0">
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-7 align-v-center pt-2 pb-2">
+                                <div class="card h-100">
+                                    <div class="card-header" style="background-color: rgba(0,0,0,0); border-bottom: none;">
+                                        꽃스타그램
+                                    </div>
+                                    <div class="card-body pt-0">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            -->
+            <!-- END: 이벤트&SNS 정보 -->
         </main>
         <footer>
+            <div class="">
+            </div>
         </footer>
     </div>
     
@@ -225,23 +270,16 @@
     <script src="js/ktiot.js""></script>
     <script src="js/weather.js""></script>
     <script>
-    // START:   개발 편의를 위한 사용자 정의 함수
-    function ktiot_split_dict_array(dict_array) {
-        let result = {};
-        for (let i = 0; i < dict_array.length; i++) {
-            for (const [key, value] of Object.entries(dict_array[i].attributes)) {
-                if (!result.hasOwnProperty(key)) {
-                    result[key] = [];
-                }
-                result[key].push(value); 
-            }
-        }
-        return result;
-    }
-    // END:     개발 편의를 위한 사용자 정의 함수
-
+    /**
+     *  DOM 업데이트와 태그 스트림 데이터 가공하기 위한 작업 작성
+     * 
+     *  @author: 
+     *      - 신병주(webmaster@mail.gomi.land)
+     */
     // START:   KT IoTMakers에 필요한 전역 변수들
+    const CUR_DATE_YYYY_MM_DD = new Date().toJSON().split('T')[0];
     const DATA_COUNT = 100;
+    const MAX_DATA_COUNT = 9999;
     const REQ_PERIOD = 60;
     const ATTR_NAME_LIST = ['light', 'temperature', 'moisture', 'conductivity'];
     // END:     KT IoTMakers에 필요한 전역 변수들
@@ -351,8 +389,6 @@
         $("#info-battery").html(last_data['battery']);
         CHART_CTX_LIST.map((chart, index) => {
             chart.data.datasets[0].data.push(last_data[ATTR_NAME_LIST[index]]);
-            $(`#min-${ATTR_NAME_LIST[index]}`).html(Math.min.apply(null, chart.data.datasets[0].data));
-            $(`#max-${ATTR_NAME_LIST[index]}`).html(Math.max.apply(null, chart.data.datasets[0].data));
             if (chart.data.datasets[0].data.length > DATA_COUNT) {
                 chart.data.datasets[0].data.shift();
             }
@@ -361,6 +397,21 @@
         });
     }, 3100);
     // END:     주기적인 KT IOTmakers 통신을 위한 콜백함수
+
+    // START: 센서 최대/최소값 업데이트 (단 데이터가 많아 1분에 한번씩)
+    function updateMinMaxSensorData() {
+        let daily_datas = ktiot.get_tag_stream_until(MAX_DATA_COUNT, `${CUR_DATE_YYYY_MM_DD} 00:00`, `${CUR_DATE_YYYY_MM_DD} 23:59`).data;
+        let split_daily_datas = ktiot.split_dict_array(daily_datas);
+        CHART_CTX_LIST.map((chart, index) => {
+            $(`#min-${ATTR_NAME_LIST[index]}`).html(Math.min.apply(null, split_daily_datas[ATTR_NAME_LIST[index]]));
+            $(`#max-${ATTR_NAME_LIST[index]}`).html(Math.max.apply(null, split_daily_datas[ATTR_NAME_LIST[index]]));
+        });
+    }
+    updateMinMaxSensorData();
+    setInterval(() => {
+        updateMinMaxSensorData();
+    }, 100000);
+    // END: 센서 최대/최소값 업데이트 (단 데이터가 많아 1분에 한번씩)
 
     $( document ).ready(function() {
         // START:   레이아웃이 깨지는걸 막기 위한 flowtype 라이브러리 설정
