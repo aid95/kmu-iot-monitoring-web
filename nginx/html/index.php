@@ -73,11 +73,11 @@
                                                 <h2 id="avg-temperature" class="align-font-txt-center">-</h2>
                                             </div>
                                             <div class="col-md-3">
-                                                <p class="align-font-txt-center">💡</p>
+                                                <p class="align-font-txt-center">☀️</p>
                                                 <h2 id="avg-light" class="align-font-txt-center">-</h2>
                                             </div>
                                             <div class="col-md-3">
-                                                <p class="align-font-txt-center">⚡</p>
+                                                <p class="align-font-txt-center">💩</p>
                                                 <h2 id="avg-conductivity" class="align-font-txt-center">-</h2>
                                             </div>
                                             <div class="col-md-3">
@@ -88,7 +88,7 @@
                                     </div>
 
                                     <div class="card-header" style="border-top: 1px solid rgba(0,0,0,.125); background-color: rgba(0,0,0,0); border-bottom: none;">
-                                        최근 최저/최대 데이터
+                                        최저/최대 데이터
                                     </div>
                                     <div class="card-body">
                                         <div class="row">
@@ -98,12 +98,12 @@
                                                 <h3 id="max-temperature" class="align-font-txt-center">-</h2>
                                             </div>
                                             <div class="col-md-3">
-                                                <p class="align-font-txt-center">💡</p>
+                                                <p class="align-font-txt-center">☀️</p>
                                                 <h3 id="min-light" class="align-font-txt-center">-</h2>
                                                 <h3 id="max-light" class="align-font-txt-center">-</h2>
                                             </div>
                                             <div class="col-md-3">
-                                                <p class="align-font-txt-center">⚡</p>
+                                                <p class="align-font-txt-center">💩</p>
                                                 <h3 id="min-conductivity" class="align-font-txt-center">-</h2>
                                                 <h3 id="max-conductivity" class="align-font-txt-center">-</h2>
                                             </div>
@@ -192,7 +192,7 @@
                                                     <div class="card-body">
                                                         <div class="row">
                                                             <!-- START: 주간 평균 날씨 -->
-                                                            <div class="col-md-12 align-font-txt-center" style="font-size: 2.1rem;" id="week-avg-weather">
+                                                            <div class="col-md-12 align-font-txt-center" style="font-size: 1.8rem;" id="week-avg-weather">
                                                             </div>
                                                             <!-- END: 주간 평균 날씨 -->
                                                         </div>
@@ -275,6 +275,7 @@
      * 
      *  @author: 
      *      - 신병주(webmaster@mail.gomi.land)
+     *      - 김규동
      */
     // START:   KT IoTMakers에 필요한 전역 변수들
     const CUR_DATE_YYYY_MM_DD = new Date().toJSON().split('T')[0];
