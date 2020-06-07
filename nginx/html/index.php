@@ -389,7 +389,7 @@
     });
     // END:   KT iotmakers 데이터 그래프 표시
 
-    // START:   주기적인 KT IOTmakers 통신을 위한 콜백함수
+    // START:   주기적인 KT IOTmakers 통신을 위한 타이머 함수
     setInterval(() => {
         // REQ_PERIOD분 동안의 DATA_COUNT개의 데이터의 평균을 구함.
         let period_datas = ktiot.get_tag_stream_period(DATA_COUNT, REQ_PERIOD).data;
