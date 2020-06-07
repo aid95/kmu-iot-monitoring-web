@@ -112,7 +112,7 @@ let owmapi = (function (owmapi, $) {
                 total_uvi += daily_datas[0].uvi;
             }
 
-            let avg_dom = $("<p>").html(`🌡 ${(total_temp / daily_datas_len).toFixed(1)}℃ / 🤒 ${(total_feels_like / daily_datas_len).toFixed(1)}℃ / 🕶 ${(total_uvi / daily_datas_len).toFixed(1)} / 💦 ${(total_humidity / daily_datas_len).toFixed(1)}`);
+            let avg_dom = $("<p>").attr("style", "font-size: 0.99rem;").html(`🌡 ${(total_temp / daily_datas_len).toFixed(1)}℃ / 🤒 ${(total_feels_like / daily_datas_len).toFixed(1)}℃ / 🕶 ${(total_uvi / daily_datas_len).toFixed(1)} / 💦 ${(total_humidity / daily_datas_len).toFixed(1)}`);
             root_dom.empty().append(avg_dom);
         }
 
