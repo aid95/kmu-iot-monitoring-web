@@ -51,7 +51,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-xs-12 pt-4 pb-4" style="margin: 0 auto;">
-                            <span class="align-font-txt-center" style="font-size: 3rem;">FLORA 🌺 MONITOR<span>
+                            <span class="align-font-txt-center" style="font-size: 3rem;">FLORA 🌺 MONITOR</span>
                         </div>
                     </div>
                 </div>
@@ -222,28 +222,55 @@
             <!-- END: 날씨 정보 -->
 
             <!-- START: 이벤트&SNS 정보 -->
-            <!--
             <div class="container">
                 <div class="row">
-                    <div class="col-xs-12">
+                    <div class="col-lg-12">
                         <div class="row">
-                            <div class="col-md-5 pt-2 pb-2">
+                            <div class="col-md-12 pt-2 pb-2" style="padding: 0;">
                                 <div class="card h-100">
                                     <div class="card-header" style="background-color: rgba(0,0,0,0); border-bottom: none;">
-                                        이벤트 기록
+                                        식물 관리
                                     </div>
                                     <div class="card-body pt-0">
+                                        <div class="row">
+                                            <!-- START:  이벤트 로그 -->
+                                            <div class="col-md-4">
+                                                <div class="card h-100" style="border: none;">
+                                                    <div class="card-header" style="background-color: rgba(0,0,0,0); border-bottom: none;">
+                                                        이벤트 로그
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <!-- START: 이벤트 로그 -->
+                                                            <div class="col-md-12">
+                                                                <div class="row" id="event-log-viewer">
+                                                                </div>
+                                                            </div>
+                                                            <!-- END: 이벤트 로그 -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- END:  이벤트 로그 -->
 
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-7 align-v-center pt-2 pb-2">
-                                <div class="card h-100">
-                                    <div class="card-header" style="background-color: rgba(0,0,0,0); border-bottom: none;">
-                                        꽃스타그램
-                                    </div>
-                                    <div class="card-body pt-0">
-
+                                            <!-- START: 식물 SNS -->
+                                            <div class="col-md-8">
+                                                <div class="card h-100" style="border: none;">
+                                                    <div class="card-header" style="background-color: rgba(0,0,0,0); border-bottom: none;">
+                                                        SNS
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="row">
+                                                            <!-- START: SNS -->
+                                                            <div class="col-md-12" id="flora-sns-viewer">
+                                                            </div>
+                                                            <!-- END: SNS -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- END: 식물 SNS -->
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -251,18 +278,16 @@
                     </div>
                 </div>
             </div>
-            -->
             <!-- END: 이벤트&SNS 정보 -->
         </main>
         <footer>
-            <div class="">
-            </div>
+            <p class="align-font-txt-center">Copyright 2020 FLORA 🌺 MONITOR MONITORING DASHBOARD</p>
         </footer>
     </div>
     
+    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
     <script src="js/flowtype.js"></script>
 
@@ -444,6 +469,10 @@
         // START: 날씨 정보 초기화
         owmapi.one_call_weather('cur-weather', 'week-weather', 'week-avg-weather');
         // END: 날씨 정보 초기화
+
+        // START: KT IoTMakers 이벤트 리스트
+        ktiot.get_event_logs('low-battery', 'event-log-viewer');
+        // END: KT IoTMakers 이벤트 리스트
     });
     </script>
 </body>
