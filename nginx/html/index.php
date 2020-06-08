@@ -406,7 +406,11 @@
         // 평균 데이터를 요소에 반영
         ATTR_NAME_LIST.map((name) => {
             average_data[name] /= period_datas.length;
-            $(`#avg-${name}`).html(average_data[name].toFixed(1))
+            if (name == 'temperature') {
+                $(`#avg-${name}`).html(average_data[name].toFixed(1));
+            } else {
+                $(`#avg-${name}`).html(Math.round(average_data[name]));
+            }
         });
 
         // 가장 최근 추가된 데이터를 그래프에 반영.

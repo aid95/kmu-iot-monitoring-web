@@ -70,7 +70,7 @@ let owmapi = (function (owmapi, $) {
                         $("<img>").attr("src", `http://openweathermap.org/img/wn/${weather.current.weather[0].icon}@4x.png`)
                     ),
                     $("<div>").addClass("col-md-12").addClass("align-font-txt-center").append(
-                        $("<p>").attr("style", "font-size: 0.99rem;").html(`🌡 ${(weather.current.temp-273.15).toFixed(1)}℃ / 🤒 ${(weather.current.feels_like-273.15).toFixed(1)}℃ / 🕶 ${(weather.current.uvi).toFixed(1)} / 💦 ${(weather.current.humidity).toFixed(1)}`),
+                        $("<p>").html(`🌡 ${(weather.current.temp-273.15).toFixed(1)}℃ / 🤒 ${(weather.current.feels_like-273.15).toFixed(1)}℃ / 🕶 ${Math.round(weather.current.uvi)} / 💦 ${Math.round(weather.current.humidity)}`),
                     )
                 )
             );
@@ -112,7 +112,7 @@ let owmapi = (function (owmapi, $) {
                 total_uvi += daily_datas[0].uvi;
             }
 
-            let avg_dom = $("<p>").html(`🌡 ${(total_temp / daily_datas_len).toFixed(1)}℃ / 🤒 ${(total_feels_like / daily_datas_len).toFixed(1)}℃ / 🕶 ${(total_uvi / daily_datas_len).toFixed(1)} / 💦 ${(total_humidity / daily_datas_len).toFixed(1)}`);
+            let avg_dom = $("<p>").html(`🌡 ${(total_temp / daily_datas_len).toFixed(1)}℃ / 🤒 ${(total_feels_like / daily_datas_len).toFixed(1)}℃ / 🕶 ${Math.round(total_uvi / daily_datas_len)} / 💦 ${Math.round(total_humidity / daily_datas_len)}`);
             root_dom.empty().append(avg_dom);
         }
 
