@@ -243,7 +243,7 @@
                                                         <div class="row">
                                                             <!-- START: 이벤트 로그 -->
                                                             <div class="col-md-12">
-                                                                <div class="row" id="event-log-viewer">
+                                                                <div class="row" id="event-log-viewer" style="height: 400px;overflow: scroll;">
                                                                 </div>
                                                             </div>
                                                             <!-- END: 이벤트 로그 -->
