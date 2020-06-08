@@ -1,12 +1,18 @@
 let ktiot = (function (ktiot, $) {
     // START: KT IoTMakers와 통신하기 위해서 필요한 전역 변수
     const DEVICE_ID                 = "imgomiD1591093976479";
-    const EVENT_ID_DICT             = {
-        'low-battery': {
+    const EVENT_ID_DICT             = [
+        {
+            name: 'low-battery',
             id: '001PTL001D10008796', 
             message: '센서의 배터리가 15% 이하 입니다. 배터리를 교체해주세요.'
+        },
+        {
+            name: 'low-moisture',
+            id: '001PTL001D10008798',
+            message: '화분의 수분이 부족합니다. 수분을 보충해주세요.'
         }
-    };
+    ];
 
     const CROS_PROXY_URL            = 'https://cors-anywhere.herokuapp.com';
     const REST_API_HOST_URL         = "https://iotmakers.kt.com";
@@ -112,42 +118,56 @@ let ktiot = (function (ktiot, $) {
      * 
      *  @author: 신병주(webmaster@mail.gomi.land)
      *  @param: 
-     *      - event_name: EVENT_ID_DICT의 key
      *      - dom: 위젯을 표시할 DOM ID
      *  @return: 이벤트 로그
      */
-    ktiot.get_event_logs = (event_name, dom) => {
+    ktiot.get_event_logs = (dom) => {
         if (!IS_INIT) {
             ktiot.init();
         }
         let start_time = new Date();
         start_time.setDate(start_time.getDate()-7)
-        const req_url = `api/v1/event/logByEventId/${EVENT_ID_DICT[event_name].id}/${start_time.getTime()}`;
-        let event_logs_data = JSON.parse(api_method_get_send(
-            `${REST_API_HOST_URL}/${req_url}`,
-            { /* params */ }
-        ));
+        let event_logs = [];
+        for (let i = 0; i < EVENT_ID_DICT.length; i++) {
+            let req_url = `api/v1/event/logByEventId/${EVENT_ID_DICT[i].id}/${start_time.getTime()}`;
+            let event = JSON.parse(api_method_get_send(
+                `${REST_API_HOST_URL}/${req_url}`,
+                { /* params */ }
+            ));
+            event.data.rows.map((item) => {
+                event_logs.push(item);
+            });
+        }
+
+        event_logs.sort(function(first, second) {
+            return (new Date(second.outbDtm)) - (new Date(first.outbDtm));
+        });
 
         if (dom !== undefined) {
             let root_dom = $(`#${dom}`);
-            let rows = event_logs_data.data.rows;
-            for (let i = 0; i < rows.length; i++) {
+            for (let i = 0; i < event_logs.length; i++) {
+                let event_idx = 0;
+                for (; event_idx < EVENT_ID_DICT.length; event_idx++) {
+                    if (EVENT_ID_DICT[event_idx].id == event_logs[i].evetId) {
+                        break;
+                    }
+                }
                 root_dom.append(
                     $("<div>").addClass("col-md-12 mb-2").attr("style", "border-left: 2px solid red;").append(
                         $("<div>").addClass("col-md-12").append(
-                            $("<h3>").html(rows[i].evetNm)
+                            $("<h3>").html(event_logs[i].evetNm)
                         ),
                         $("<div>").addClass("col-md-12").append(
-                            $("<span>").attr("style", "font-size: 0.9rem;").html(EVENT_ID_DICT[event_name].message)
+                            $("<span>").attr("style", "font-size: 0.9rem;").html(EVENT_ID_DICT[event_idx].message)
                         ),
                         $("<div>").addClass("col-md-12").append(
-                            $("<p>").attr("style", "font-size: 0.9rem;").html(rows[i].msrDt)
+                            $("<p>").attr("style", "font-size: 0.9rem;").html(event_logs[i].outbDtm)
                         )
                     )
                 )
             }
         }
-        return event_logs_data;
+        return event_logs;
     };
 
     ktiot.get_all_event_logs = () => {

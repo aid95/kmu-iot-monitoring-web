@@ -475,7 +475,7 @@
         // END: 날씨 정보 초기화
 
         // START: KT IoTMakers 이벤트 리스트
-        ktiot.get_event_logs('low-battery', 'event-log-viewer');
+        ktiot.get_event_logs('event-log-viewer');
         // END: KT IoTMakers 이벤트 리스트
     });
     </script>
