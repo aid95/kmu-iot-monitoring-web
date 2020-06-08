@@ -231,8 +231,8 @@ let ktiot = (function (ktiot, $) {
     function send(method, url, headers, data, fn, async=false, cors_proxy=false) {
         if (cors_proxy) {
             url = `${CROS_PROXY_URL}/${url}`;
+            headers['X-Requested-With'] = 'XMLHttpRequest';
         }
-
         $.ajax(url, {
             async,
             method,
