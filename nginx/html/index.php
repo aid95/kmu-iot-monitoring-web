@@ -281,7 +281,7 @@
             <!-- END: 이벤트&SNS 정보 -->
         </main>
         <footer>
-            <p class="align-font-txt-center">Copyright 2020 FLORA 🌺 MONITOR MONITORING DASHBOARD</p>
+            <p class="align-font-txt-center">Copyright 2020 FLORA 🌺 MONITORING DASHBOARD</p>
         </footer>
     </div>
     
