@@ -122,7 +122,7 @@ let owmapi = (function (owmapi, $) {
     /**
      *  @description Ajax를 간편하기 사용하기 위한 함수
      * 
-     *  @author: 김규동
+     *  @author: 신병주(webmaster@mail.gomi.land)
      *  @param:
      *      - method: 메소드명
      *      - url: 요청할 URL 주소

@@ -17,9 +17,9 @@
     <link rel="shortcut icon" href="favicon.ico">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <style>
     @font-face { font-family: 'silgothic'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/silgothic.woff') format('woff'); font-weight: normal; font-style: normal; }
-
     body {
         margin: 0;
         padding: 0;
@@ -153,6 +153,7 @@
                 </div>
             </div>
             <!-- END: 센서 정보 -->
+
             <!-- START: 날씨 정보 -->
             <div class="container">
                 <div class="row">
@@ -161,7 +162,7 @@
                             <div class="col-md-12 pt-2 pb-2" style="padding: 0;">
                                 <div class="card h-100">
                                     <div class="card-header" style="background-color: rgba(0,0,0,0); border-bottom: none;">
-                                        날씨 정보
+                                        날씨 정보 <a href="https://openweathermap.org/" style="decoration: none;"><i class="fa fa-exclamation-circle" aria-hidden="true"></i></a>
                                     </div>
                                     <div class="card-body pt-0">
                                         <div class="row">
