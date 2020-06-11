@@ -14,8 +14,8 @@ class KakaoAPI:
 
     def set_tokens_from_db(self):
         sql = "SELECT * FROM flora WHERE name=%s"
-        curs.execute(sql, ('imgomi'))
-        rows = curs.fetchall()
+        self.CURS.execute(sql, ('imgomi'))
+        rows = self.CURS.fetchall()
 
         url = 'https://kauth.kakao.com/oauth/token'
         code = rows[0]['code']
@@ -41,7 +41,7 @@ class KakaoAPI:
             return
         url = 'https://kapi.kakao.com/v2/api/talk/memo/send'
         h = {'Authorization': 'Bearer {}'.format(self.ACCESS_TOKEN)}
-        d = {'template_id': '30087'}
+        d = {'template_id': template_id}
         x = requests.post(url, headers=h, data=d)
 
 
