@@ -1,3 +1,9 @@
+<?php
+    session_start();
+    if (!isset($_SESSION["kakao"])) {
+        echo '<script>window.location.href="https://kauth.kakao.com/oauth/authorize?client_id=e88dc6e8a3c14d8a611dbb9d511d4cf9&redirect_uri=http://flora.gomi.land/oauth&response_type=code"</script>';
+    }
+?>
 <!--
                @TEAM.MAKERS
      _._     _,-'""`-._
@@ -294,13 +300,6 @@
     <script src="js/ktiot.js"></script>
     <script src="js/weather.js"></script>
     <script>
-
-<?php
-session_start();
-if (!isset($_SESSION["kakao"])) {
-    echo "<script> window.location.href='https://kauth.kakao.com/oauth/authorize?client_id=e88dc6e8a3c14d8a611dbb9d511d4cf9&redirect_uri=http://flora.gomi.land/oauth&response_type=code'</script>";
-}
-?>
 
     /**
      *  DOM 업데이트와 태그 스트림 데이터 가공하기 위한 작업 작성
