@@ -12,7 +12,7 @@ class KakaoAPI:
         self.DB = pymysql.connect(host='db', port=3306, user='root', passwd='sksmschlrhek1', db='iotadmin_db', charset='utf8')
         self.CURS = self.DB.cursor(pymysql.cursors.DictCursor)
 
-    def set_tokens_from_db():
+    def set_tokens_from_db(self):
         sql = "SELECT * FROM flora WHERE name=%s"
         curs.execute(sql, ('imgomi'))
         rows = curs.fetchall()
@@ -30,13 +30,13 @@ class KakaoAPI:
         self.ACCESS_TOKEN = json_data['access_token']
         self.REFRESH_TOKEN = json_data['refresh_token']
 
-    def get_access_token():
+    def get_access_token(self):
         return self.ACCESS_TOKEN
 
-    def get_refresh_token():
+    def get_refresh_token(self):
         return self.REFRESH_TOKEN
 
-    def send_template_message_for_me(template_id)
+    def send_template_message_for_me(self, template_id):
         if self.ACCESS_TOKEN == '':
             return
         url = 'https://kapi.kakao.com/v2/api/talk/memo/send'
