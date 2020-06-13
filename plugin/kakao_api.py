@@ -68,16 +68,19 @@ def main():
 
     while True:
         if kakao.is_new_code():
+            print("UPDATE NEW TOKEN")
             kakao.set_tokens_from_db()
         water, battery = kakao.get_limit_sensor_data_from_db()
 
         if water <= 0 and not state_water:
+            print("SEND WATER MESSAGE")
             kakao.send_template_message_for_me(template_list['water'])
             state_water = True
         elif water >= 20 and state_water:
             state_water = False
         
         if battery <= 15 and not state_battery:
+            print("SEND BATTERY MESSAGE")
             kakao.send_template_message_for_me(template_list['battery'])
             state_battery = True
         elif battery >= 15 and state_battery:
