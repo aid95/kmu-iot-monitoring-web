@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
     db:
-        container_name: iot_db
+        container_name: db
         image: mariadb
         restart: always
         environment:
@@ -15,7 +15,7 @@ services:
         ports:
             - "3306:3306"
     app:
-        container_name: iot_php
+        container_name: php
         image: php:fpm
         depends_on:
             - db
@@ -24,7 +24,7 @@ services:
         volumes:
             - ./nginx/html:/var/www/html
     phpmyadmin:
-        container_name: iot_phpmyadmin
+        container_name: phpmyadmin
         image: phpmyadmin/phpmyadmin
         depends_on: 
             - db
@@ -33,7 +33,7 @@ services:
         environment: 
             PMA_HOST: db
     web:
-        container_name: iot_nginx
+        container_name: nginx
         build:
             context: ./nginx
             dockerfile: ./Dockerfile

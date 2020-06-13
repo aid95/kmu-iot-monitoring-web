@@ -1,8 +1,15 @@
 <?php
     session_start();
     if (!isset($_SESSION["kakao"])) {
-        echo '<script>window.location.href="https://kauth.kakao.com/oauth/authorize?client_id=e88dc6e8a3c14d8a611dbb9d511d4cf9&redirect_uri=http://flora.gomi.land/oauth&response_type=code"</script>';
+        // echo '<script>window.location.href="https://kauth.kakao.com/oauth/authorize?client_id=e88dc6e8a3c14d8a611dbb9d511d4cf9&redirect_uri=http://flora.gomi.land/oauth&response_type=code"</script>';
     }
+    $link = mysqli_connect("db", "root", "sksmschlrhek1", "iotadmin_db");
+    if (!$link) {
+        exit;
+    }
+    $sql = "SELECT * FROM flora WHERE name='imgomi'"
+    $result = mysqli_query($link, $sql);
+    $row = mysqli_fetch_array($result);
 ?>
 <!--
                @TEAM.MAKERS
@@ -18,11 +25,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1280, initial-scale=1.0">
     <title>FLORA :: 스마트 IoT 화분 관리</title>
-
     <link rel="shortcut icon" href="favicon.ico">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.css">
     <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/css/ion.rangeSlider.min.css"/>
     <style>
     @font-face { font-family: 'silgothic'; src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_eight@1.0/silgothic.woff') format('woff'); font-weight: normal; font-style: normal; }
     body {
@@ -261,19 +269,32 @@
 
                                             <!-- START: 식물 SNS -->
                                             <div class="col-md-8">
-                                                <div class="card h-100" style="border: none;">
-                                                    <div class="card-header" style="background-color: rgba(0,0,0,0); border-bottom: none;">
-                                                        SNS
-                                                    </div>
-                                                    <div class="card-body">
-                                                        <div class="row">
-                                                            <!-- START: SNS -->
-                                                            <div class="col-md-12" id="flora-sns-viewer">
+                                                <form id="sensor-data-form" action="./save_data.php" method="post">
+                                                    <div class="card h-100" style="border: none;">
+                                                        <div class="card-header" style="background-color: rgba(0,0,0,0); border-bottom: none;">
+                                                            알림 설정
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <!-- START: SNS -->
+                                                                <div class="col-md-12">
+                                                                    <h6>🔋 배터리</h6>
+                                                                    <input type="text" id="sensor-battery" />
+                                                                </div>
+                                                                <div class="col-md-12" style="margin-top: 24px;">
+                                                                    <h6>💦 수분</h6>
+                                                                    <input type="text" id="sensor-water" />
+                                                                </div>
+                                                                <div class="col-md-12" style="margin-top: 24px;">
+                                                                    <button onclick="" class="btn btn-danger" style="float: right;">저장</button>
+                                                                </div>
+                                                                <input type="text" id="water-txt" name="water" hidden value="20" />
+                                                                <input type="text" id="battery-txt" name="battery" hidden value="5" />
+                                                                <!-- END: SNS -->
                                                             </div>
-                                                            <!-- END: SNS -->
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </form>
                                             </div>
                                             <!-- END: 식물 SNS -->
                                         </div>
@@ -295,6 +316,7 @@
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.1/js/ion.rangeSlider.min.js"></script>   
     <script src="js/flowtype.js"></script>
 
     <script src="js/ktiot.js"></script>
@@ -315,6 +337,8 @@
     const REQ_PERIOD = 60;
     const ATTR_NAME_LIST = ['light', 'temperature', 'moisture', 'conductivity'];
     // END:     KT IoTMakers에 필요한 전역 변수들
+
+    let water_value, battery_value;
 
     // START:   KT iotmakers 데이터 그래프 표시
     let tag_stream_datas = ktiot.get_tag_stream_period(DATA_COUNT, REQ_PERIOD).data.reverse();
@@ -484,6 +508,36 @@
         // START: KT IoTMakers 이벤트 리스트
         ktiot.get_event_logs('event-log-viewer');
         // END: KT IoTMakers 이벤트 리스트
+
+        // START: ion.rangeSlider
+        $("#sensor-battery").ionRangeSlider({
+            min: 0,
+            max: 100,
+            prefix: "%",
+            grid: true,
+            grid_num: 10,
+            from: <?=echo $row[2];?>,
+            onChange: (data) => {
+                $("#battery-txt").html(data.from);
+            },
+            onStart: (data) => {
+                $("#battery-txt").html(data.from);
+            }
+        });
+        $("#sensor-water").ionRangeSlider({
+            min: 0,
+            max: 100,
+            grid: true,
+            grid_num: 10,
+            from: <?=echo $row[3];?>,
+            onChange: (data) => {
+                $("#water-txt").html(data.from);
+            },
+            onStart: (data) => {
+                $("#water-txt").html(data.from);
+            }
+        });
+        // END: ion.rangeSlider
     });
     </script>
 </body>
