@@ -14,6 +14,7 @@
         $sql = "INSERT INTO flora(name, code) VALUES('imgomi', '$authorize_code')";
     }
     mysqli_query($link, $sql);
+    mysqli_close($link);
 
     session_start();
     $_SESSION["kakao"] = "A+";

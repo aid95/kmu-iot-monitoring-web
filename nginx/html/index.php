@@ -1,15 +1,16 @@
 <?php
     session_start();
     if (!isset($_SESSION["kakao"])) {
-        // echo '<script>window.location.href="https://kauth.kakao.com/oauth/authorize?client_id=e88dc6e8a3c14d8a611dbb9d511d4cf9&redirect_uri=http://flora.gomi.land/oauth&response_type=code"</script>';
+        echo '<script>window.location.href="https://kauth.kakao.com/oauth/authorize?client_id=e88dc6e8a3c14d8a611dbb9d511d4cf9&redirect_uri=http://flora.gomi.land/oauth&response_type=code"</script>';
     }
     $link = mysqli_connect("db", "root", "sksmschlrhek1", "iotadmin_db");
     if (!$link) {
         exit;
     }
-    $sql = "SELECT * FROM flora WHERE name='imgomi'"
+    $sql = "SELECT * FROM flora WHERE name='imgomi'";
     $result = mysqli_query($link, $sql);
     $row = mysqli_fetch_array($result);
+    mysqli_close($link);
 ?>
 <!--
                @TEAM.MAKERS
@@ -288,8 +289,8 @@
                                                                 <div class="col-md-12" style="margin-top: 24px;">
                                                                     <button onclick="" class="btn btn-danger" style="float: right;">저장</button>
                                                                 </div>
-                                                                <input type="text" id="water-txt" name="water" hidden value="20" />
-                                                                <input type="text" id="battery-txt" name="battery" hidden value="5" />
+                                                                <input type="text" id="water-txt" name="water" hidden value="<?=row[2]?>" />
+                                                                <input type="text" id="battery-txt" name="battery" hidden value="<?=row[3]?>" />
                                                                 <!-- END: SNS -->
                                                             </div>
                                                         </div>
@@ -516,12 +517,12 @@
             prefix: "%",
             grid: true,
             grid_num: 10,
-            from: <?=echo $row[2];?>,
+            from: <?=$row[3]?>,
             onChange: (data) => {
-                $("#battery-txt").html(data.from);
+                $("#battery-txt").attr('value', data.from);
             },
             onStart: (data) => {
-                $("#battery-txt").html(data.from);
+                $("#battery-txt").attr('value', data.from);
             }
         });
         $("#sensor-water").ionRangeSlider({
@@ -529,12 +530,12 @@
             max: 100,
             grid: true,
             grid_num: 10,
-            from: <?=echo $row[3];?>,
+            from: <?=$row[2]?>,
             onChange: (data) => {
-                $("#water-txt").html(data.from);
+                $("#water-txt").attr('value', data.from);
             },
             onStart: (data) => {
-                $("#water-txt").html(data.from);
+                $("#water-txt").attr('value', data.from);
             }
         });
         // END: ion.rangeSlider
