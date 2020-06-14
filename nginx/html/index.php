@@ -273,7 +273,7 @@
                                                 <form id="sensor-data-form" action="./save_data.php" method="post">
                                                     <div class="card h-100" style="border: none;">
                                                         <div class="card-header" style="background-color: rgba(0,0,0,0); border-bottom: none;">
-                                                            알림 설정
+                                                            카카오톡 알림 설정
                                                         </div>
                                                         <div class="card-body">
                                                             <div class="row">
