@@ -15,7 +15,7 @@ def base64ToString(b):
 class DBController:
 
     def __init__(self, host, user, passwd, db):
-        self.DB = pymysql.connect(host=host, port=3306, user=user, passwd=passwd, db=db, charset='utf8')
+        self.DB = pymysql.connect(host=host, port=3306, user=user, passwd=passwd, db=db, charset='utf8', autocommit=True)
         self.CURS = self.DB.cursor(pymysql.cursors.DictCursor)
 
     def exec_query(self, query, args):
@@ -34,7 +34,6 @@ class KakaoAPI:
         self.REFRESH_TOKEN = ''
 
     def set_tokens(self, code):
-        rows = self._exec_query("SELECT * FROM flora WHERE name=%s")
         url = 'https://kauth.kakao.com/oauth/token'
         d = {
             'grant_type': 'authorization_code',
@@ -104,7 +103,8 @@ def main():
     ktiot.init()
 
     rows = dbc.exec_query("SELECT * FROM flora WHERE name=%s", ('imgomi'))
-    kakao.set_tokens(rows[0]['code'])
+    old_code = rows[0]['code']
+    kakao.set_tokens(old_code)
 
     is_notify_water = False
     is_notify_battery = False
@@ -125,6 +125,9 @@ def main():
 
         time.sleep(10)
         rows = dbc.exec_query("SELECT * FROM flora WHERE name=%s", ('imgomi'))
+        if old_code != rows[0]['code']:
+            old_code = rows[0]['code']
+            kakao.set_tokens(old_code)
         
 
 if __name__ == '__main__':
